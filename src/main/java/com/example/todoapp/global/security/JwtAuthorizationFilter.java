@@ -44,10 +44,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 //2. Refresh Token 존재?
                 if (Strings.hasText(refreshToken)) {
                     //2-1. Refresh Token 유효 && Redis에 존재?
-                    if (jwtUtil.validateToken(refreshToken) && redisRepository.hasRefreshToken(refreshToken)) {
-                        //Reissue Access Token && add Header
+                    if (jwtUtil.validateToken(refreshToken)) {
                         Claims info = jwtUtil.getUserInfoFromToken(refreshToken);
                         String username = info.getSubject();
+                        if(!redisRepository.checkRefreshToken(username, refreshToken)) {
+                            filterChain.doFilter(request, response);
+                            return;
+                        }
+
+                        //Reissue Access Token && add Header
                         String newToken = jwtUtil.createAccessToken(username, jwtUtil.getUserRole(info));
                         response.setHeader(jwtUtil.ACCESS_TOKEN_HEADER, newToken);
                         response.setHeader(jwtUtil.REFRESH_TOKEN_HEADER, jwtUtil.BEARER_PREFIX + refreshToken);

@@ -28,9 +28,15 @@ public enum StatusEnum {
     UPDATE_POST_SUCCESS(HttpStatus.OK, "UPDATE_POST_SUCCESS", "게시글이 수정되었습니다."),
     DELETE_POST_SUCCESS(HttpStatus.OK, "DELETE_POST_SUCCESS", "게시글이 삭제되었습니다."),
 
+    POST_LIKE_SUCCESS(HttpStatus.OK, "POST_LIKE_SUCCESS", "게시글을 좋아요 하셨습니다."),
+    POST_LIKE_CANCEL(HttpStatus.OK, "POST_LIKE_CANCEL", "게시글 좋아요를 취소하셨습니다."),
+    
     CREATE_COMMENT_SUCCESS(HttpStatus.OK, "CREATE_COMMENT_SUCCESS", "댓글이 등록되었습니다."),
     UPDATE_COMMENT_SUCCESS(HttpStatus.OK, "UPDATE_COMMENT_SUCCESS", "댓글이 수정되었습니다."),
     DELETE_COMMENT_SUCCESS(HttpStatus.OK, "DELETE_COMMENT_SUCCESS", "댓글이 삭제되었습니다."),
+    
+    COMMENT_LIKE_SUCCESS(HttpStatus.OK, "COMMENT_LIKE_SUCCESS", "댓글을 좋아요 하셨습니다."),
+    COMMENT_LIKE_CANCEL(HttpStatus.OK, "COMMENT_LIKE_CANCEL", "댓글 좋아요를 취소하셨습니다."),
 
     TOKEN_NOT_VALID(HttpStatus.UNAUTHORIZED, "TOKEN_NOT_VALID", "토큰이 유효하지 않습니다."),
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "ACCESS_DENIED", "접근 권한이 없습니다.")

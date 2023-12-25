@@ -12,7 +12,6 @@ import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.Date;
 
@@ -48,6 +47,7 @@ public class UserService {
         User user = userDetails.getUser();
         userRepository.findById(user.getId())
                 .orElseThrow(() -> new CustomException(StatusEnum.USER_NOT_FOUND));
+        String nickname = user.getNickname();
 
         //2. AccessToken black list에 등록
         Claims info = jwtUtil.getUserInfoFromToken(accessToken.substring(7));
@@ -57,13 +57,12 @@ public class UserService {
         long diff = issuedAt - currentTime;
         if (diff > 0) {
             long extra = 2000;
-            redisRepository.setBlackList(accessToken.substring(7), user.getNickname(), diff + extra);
+            redisRepository.setBlackList(accessToken.substring(7), nickname, diff + extra);
         }
 
         //3. RefreshToken 삭제
-        if (StringUtils.hasText(refreshToken)) {
-            String token = refreshToken.substring(7);
-            if (redisRepository.hasRefreshToken(token)) redisRepository.deleteRefreshToken(token);
+        if (redisRepository.hasRefreshToken(info.getSubject())) {
+            redisRepository.deleteRefreshToken(nickname);
         }
 
     }

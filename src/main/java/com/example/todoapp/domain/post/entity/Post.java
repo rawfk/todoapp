@@ -2,6 +2,7 @@ package com.example.todoapp.domain.post.entity;
 
 import com.example.todoapp.domain.comment.entity.Comment;
 import com.example.todoapp.domain.post.dto.PostUpdateDto;
+import com.example.todoapp.domain.postLike.entity.PostLike;
 import com.example.todoapp.global.entity.BaseTimeEntity;
 import com.example.todoapp.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -32,8 +33,11 @@ public class Post extends BaseTimeEntity {
     @Column(name = "post_content", nullable = false)
     private String content;
 
-    @OneToMany
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "id.post", cascade = CascadeType.REMOVE)
+    private List<PostLike> postLikes = new ArrayList<>();
 
     @Builder
     public Post(User user, String title, String content) {
@@ -43,9 +47,7 @@ public class Post extends BaseTimeEntity {
     }
 
     public void updatePost(PostUpdateDto updateDto) {
-        String title = updateDto.getTitle();
-        this.title = title == null ? this.title : title;
-        String content = updateDto.getContent();
-        this.title = content == null ? this.title : content;
+        this.title = updateDto.getTitle();
+        this.content = updateDto.getContent();
     }
 }

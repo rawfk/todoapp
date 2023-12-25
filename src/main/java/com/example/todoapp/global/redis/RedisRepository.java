@@ -21,6 +21,10 @@ public class RedisRepository {
         return redisTemplate.hasKey(key);
     }
 
+    public boolean checkRefreshToken(String key, String token) {
+        return redisTemplate.hasKey(key) && token.equals(redisTemplate.opsForValue().get(key));
+    }
+
     public void deleteRefreshToken(String key) {
         redisTemplate.delete(key);
     }
